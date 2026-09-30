@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required files exist
+        run: |
+          for f in README.md LICENSE.md CONTRIBUTING.md CODE_OF_CONDUCT.md SECURITY.md; do
+            test -f "$f" || { echo "Missing $f"; exit 1; }
+          done
